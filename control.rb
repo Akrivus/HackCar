@@ -39,8 +39,11 @@ end
 
 # This is the execution cycle itself.
 Thread.new { loop do
+    puts "LOOP HAS BEGUN"
     $vector = $control_vector
+    puts "VECTOR IS #{$vector}"
     if VECTOR_TYPES.include? $vector
+        puts "IT IS IN THE VECTOR"
         puts system("sox './dir/#{vector}.wav' -t wav -r 48k -b 16 - | csdr convert_i16_f | csdr gain_ff #{ARGV[1]} | sudo ../rpitx/rpitx -i - -m IQFLOAT -f #{ARGV[0]}e3 -s 48000")
         system("clear")
     end
