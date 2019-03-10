@@ -45,7 +45,7 @@ end
 Thread.new { loop do
     $vector = $control_vector
     if VECTOR_TYPES.include? $vector
-        system("cat ./dir/#{$vector}.wav | csdr convert_i16_f | csdr gain_ff #{ARGV[2]} | sudo ../rpitx/rpitx -i - -m IQFLOAT -f #{ARGV[0]}e3 -s #{ARGV[1]}")
+        system("play ./dir/#{$vector}.wav - | csdr convert_i16_f | csdr gain_ff #{ARGV[2]} | sudo ../rpitx/rpitx -i - -m IQFLOAT -f #{ARGV[0]}e3 -s #{ARGV[1]}")
         system("clear")
     end
     puts "Resting..."
