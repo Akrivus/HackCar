@@ -1,13 +1,9 @@
-# ARGV[0] is the frequency in MHz, ARGV[1] is the sample rate.
+# ARGV[0] is the frequency in MHz, ARGV[1] is the amp rate.
 if ARGV[0].nil?
     ARGV[0] = "27.07"
-    ARGV[1] = "48000"
-    ARGV[2] = "4.0"
+    ARGV[1] = "4.0"
 elsif ARGV[1].nil?
-    ARGV[1] = "48000"
-    ARGV[2] = "4.0"
-elsif ARGV[2].nil?
-    ARGV[2] = "4.0"
+    ARGV[1] = "4.0"
 end
 
 # The control vector is a set of commands used to determine which signals to
@@ -45,7 +41,7 @@ end
 Thread.new { loop do
     $vector = $control_vector
     if VECTOR_TYPES.include? $vector
-        system("play ./dir/#{$vector}.wav - | csdr convert_i16_f | csdr gain_ff #{ARGV[2]} | sudo ../rpitx/rpitx -i - -m IQFLOAT -f #{ARGV[0]}e3 -s #{ARGV[1]}")
+        system("sox -t wav ./dir/#{vector}.wav -t wav -r 48k -b 16 - | csdr convert_i16_f | csdr gain_ff #{ARGV[2]} | sudo ../rpitx/rpitx -i - -m IQFLOAT -f #{ARGV[0]}e3 -s 48000")
         system("clear")
     end
     puts "Resting..."
