@@ -41,7 +41,7 @@ end
 Thread.new { loop do
     $vector = $control_vector
     if VECTOR_TYPES.include? $vector
-        system("sox './dir/#{vector}.wav' -t wav -r 48k -b 16 - | csdr convert_i16_f | csdr gain_ff #{ARGV[1]} | sudo ../rpitx/rpitx -i - -m IQFLOAT -f #{ARGV[0]}e3 -s 48000")
+        puts system("sox './dir/#{vector}.wav' -t wav -r 48k -b 16 - | csdr convert_i16_f | csdr gain_ff #{ARGV[1]} | sudo ../rpitx/rpitx -i - -m IQFLOAT -f #{ARGV[0]}e3 -s 48000")
         system("clear")
     end
 end }
