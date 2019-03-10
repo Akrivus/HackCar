@@ -1,9 +1,13 @@
 # ARGV[0] is the frequency in MHz, ARGV[1] is the sample rate.
 if ARGV[0].nil?
-    ARGV[0] = "27.6"
+    ARGV[0] = "27.07"
     ARGV[1] = "48000"
+    ARGV[2] = "4.0"
 elsif ARGV[1].nil?
     ARGV[1] = "48000"
+    ARGV[2] = "4.0"
+elsif ARGV[2].nil?
+    ARGV[2] = "4.0"
 end
 
 # The length of a phase and a verbose way of determining which phase the execution
@@ -58,7 +62,7 @@ Thread.new { loop do
     $xphase = PHASE_DUTY
     $vector = $control_vector
     if VECTOR_TYPES.include? $vector
-        system("cat ./dir/#{$vector}.wav | csdr convert_i16_f | csdr gain_ff 4.0 | sudo ../rpitx/rpitx -i - -m IQFLOAT -f #{ARGV[0]}e3 -s #{ARGV[1]}")
+        system("cat ./dir/#{$vector}.wav | csdr convert_i16_f | csdr gain_ff #{ARGV[2]} | sudo ../rpitx/rpitx -i - -m IQFLOAT -f #{ARGV[0]}e3 -s #{ARGV[1]}")
         system("clear")
     end
     puts "Resting..."
