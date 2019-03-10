@@ -29,6 +29,9 @@ VECTOR_TYPES = [
 # requests with an extremely lightweight middleware.
 require 'sinatra'
 
+set :bind, '0.0.0.0'
+set :port,  4567
+
 # We have 1 axis of movement and 1 axis of rotation, we enumerate these
 # with the WASD right-handed T-mapping utilized often in gaming.
 put '/' do
