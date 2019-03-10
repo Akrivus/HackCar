@@ -47,7 +47,7 @@ Thread.new { loop do
     $xphase = PHASE_DUTY
     $vector = $control_vector
     if VECTOR_TYPES.include? $vector
-        system("cat ./dir/#{$vector}.wav | csdr convert_i16_f | csdr gain_ff 48.0 | sudo ../rpitx/rpitx -i - -m IQFLOAT -f 27.0633e3 -s 44100")
+        system("cat ./dir/#{$vector}.wav | csdr convert_i16_f | csdr gain_ff 4.0 | sudo ../rpitx/rpitx -i - -m IQFLOAT -f 27.0633e3 -s 44100")
         system("clear")
     end
     puts "Resting..."
