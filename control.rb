@@ -10,17 +10,6 @@ elsif ARGV[2].nil?
     ARGV[2] = "4.0"
 end
 
-# The length of a phase and a verbose way of determining which phase the execution
-# cycle is currently operating on.
-PHASE_TIME = 0.25
-PHASE_REST = false
-PHASE_DUTY = true
-
-# The 'xphase' is the phase in the current execution cycle. When false, the
-# control payload is being processed and populated by the accessor, and when
-# true, the payload is being enacted and cleared for a secondary
-$xphase = false
-
 # The control vector is a set of commands used to determine which signals to
 # transmit to the vehicle in manipulating its yaw and acceleration.
 $control_vector = '_a'
@@ -49,17 +38,11 @@ set :port,  4567
 put '/' do
     if VECTOR_TYPES.include? params['vector']
         $control_vector = params['vector']
-        $xphase and true
-    else
-        $xphase and false
     end
 end
 
 # This is the execution cycle itself.
 Thread.new { loop do
-    $xphase = PHASE_REST
-    sleep     PHASE_TIME
-    $xphase = PHASE_DUTY
     $vector = $control_vector
     if VECTOR_TYPES.include? $vector
         system("cat ./dir/#{$vector}.wav | csdr convert_i16_f | csdr gain_ff #{ARGV[2]} | sudo ../rpitx/rpitx -i - -m IQFLOAT -f #{ARGV[0]}e3 -s #{ARGV[1]}")
