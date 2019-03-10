@@ -8,7 +8,7 @@ end
 
 # The control vector is a set of commands used to determine which signals to
 # transmit to the vehicle in manipulating its yaw and acceleration.
-$control_vector = '_a'
+$tx = Thread.new { system("(while true; do sox './dir/__.wav' -t wav -r 48k -b 16 -; done) | csdr convert_i16_f | csdr gain_ff #{ARGV[1]} | sudo ../rpitx/rpitx -i - -m IQFLOAT -f #{ARGV[0]}e3 -s 48000") }
 VECTOR_TYPES = [
     '__',       # BRAKE     STRAIGHT
     '_a',       # BRAKE     LEFT
@@ -33,18 +33,7 @@ set :port,  4567
 # with the WASD right-handed T-mapping utilized often in gaming.
 put '/' do
     if VECTOR_TYPES.include? params['vector']
-        $control_vector = params['vector']
+        $tx.kill
+        $tx = Thread.new { system("(while true; do sox './dir/#{params['vector']}.wav' -t wav -r 48k -b 16 -; done) | csdr convert_i16_f | csdr gain_ff #{ARGV[1]} | sudo ../rpitx/rpitx -i - -m IQFLOAT -f #{ARGV[0]}e3 -s 48000") }
     end
 end
-
-# This is the execution cycle itself.
-Thread.new { loop do
-    puts "LOOP HAS BEGUN"
-    $vector = $control_vector
-    puts "VECTOR IS #{$vector}"
-    if VECTOR_TYPES.include? $vector
-        puts "IT IS IN THE VECTOR"
-        puts system("sox './dir/#{vector}.wav' -t wav -r 48k -b 16 - | csdr convert_i16_f | csdr gain_ff #{ARGV[1]} | sudo ../rpitx/rpitx -i - -m IQFLOAT -f #{ARGV[0]}e3 -s 48000")
-        system("clear")
-    end
-end }
