@@ -32,7 +32,7 @@ set :port,  4567
 # with the WASD right-handed T-mapping utilized often in gaming.
 put '/' do
     if VECTOR_TYPES.include? params['vector']
-        $tx = Thread.new { system("(while true; do sox './dir/#{params['vector']}.wav' -t wav -r 48k -b 16 -; done) | csdr convert_i16_f | csdr gain_ff #{ARGV[1]} | sudo ../rpitx/rpitx -i - -m IQFLOAT -f #{ARGV[0]}e3 -s 48000") }
+        $tx = Thread.new { system("(while true; do sox './dir/#{params['vector']}.wav' -t wav -r 48k -b 16 -; done) | csdr convert_i16_f | csdr gain_ff #{ARGV[1]} | csdr dsb_fc | sudo ../rpitx/rpitx -i - -m IQFLOAT -f #{ARGV[0]}e3 -s 48000") }
     else
         $tx = nil
     end
