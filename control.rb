@@ -8,7 +8,6 @@ end
 
 # The control vector is a set of commands used to determine which signals to
 # transmit to the vehicle in manipulating its yaw and acceleration.
-$tx = Thread.new { system("(while true; do sox './dir/_a.wav' -t wav -r 48k -b 16 -; done) | csdr convert_i16_f | csdr gain_ff #{ARGV[1]} | sudo ../rpitx/rpitx -i - -m IQFLOAT -f #{ARGV[0]}e3 -s 48000") }
 VECTOR_TYPES = [
    #'__',       # BRAKE     STRAIGHT
     '_a',       # BRAKE     LEFT
