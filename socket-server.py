@@ -2,7 +2,7 @@ import socket
 import os
 
 server = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-server.bind((input("Enter IP address: "), 4404))
+server.bind((input("Enter IP address: "), 9909))
 
 while 1 > 0:
     data, addr = server.recvfrom(7)
