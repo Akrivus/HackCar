@@ -8,23 +8,24 @@ client.settimeout(1)
 client.sendto(b"brake !", ipaddr)
 
 while 1 > 0:
-    if keyboard.is_pressed('w'):
-        if keyboard.is_pressed('a'):
-            client.sendto(b"turn ++", ipaddr)
+    if keyboard.is_pressed('space'):
+            client.sendto(b"brake !", ipaddr)
             time.sleep(0.1)
-        elif keyboard.is_pressed('d'):
-            client.sendto(b"turn +-", ipaddr)
-            time.sleep(0.1)
-        else:
+    elif keyboard.is_pressed('w'):
             client.sendto(b"drive +", ipaddr)
             time.sleep(0.1)
+    elif keyboard.is_pressed('a'):
+            client.sendto(b"turn ++", ipaddr)
+            time.sleep(0.1)
+    elif keyboard.is_pressed('d'):
+        client.sendto(b"turn +-", ipaddr)
+        time.sleep(0.1)
     elif keyboard.is_pressed('s'):
-        if keyboard.is_pressed('a'):
-            client.sendto(b"turn -+", ipaddr)
-            time.sleep(0.1)
-        elif keyboard.is_pressed('d'):
-            client.sendto(b"turn --", ipaddr)
-            time.sleep(0.1)
-        else:
             client.sendto(b"drive -", ipaddr)
             time.sleep(0.1)
+    elif keyboard.is_pressed('q'):
+        client.sendto(b"turn -+", ipaddr)
+        time.sleep(0.1)
+    elif keyboard.is_pressed('e'):
+        client.sendto(b"turn --", ipaddr)
+        time.sleep(0.1)
