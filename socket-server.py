@@ -8,24 +8,24 @@ server.bind((input("Enter IP address: "), 9909))
 while 1 > 0:
     data, addr = server.recvfrom(7)
     print("{}: Data received... ({})".format(addr, data))
-    if data == 'turn ++':
+    if data == b'turn ++':
         print("\tTurn left!")
         os.system('''sh ./set-car-vector.sh w a''')
-    if data == 'turn +-':
+    if data == b'turn +-':
         print("\tTurn right!")
         os.system('''sh ./set-car-vector.sh w d''')
-    if data == 'turn -+':
+    if data == b'turn -+':
         print("\tTurn left!")
         os.system('''sh ./set-car-vector.sh s a''')
-    if data == 'turn --':
+    if data == b'turn --':
         print("\tTurn right!")
         os.system('''sh ./set-car-vector.sh s d''')
-    if data == 'drive +':
+    if data == b'drive +':
         print("\tGo foward!")
         os.system('''sh ./set-car-vector.sh w _''')
-    if data == 'drive -':
+    if data == b'drive -':
         print("\tGo backward!")
         os.system('''sh ./set-car-vector.sh s _''')
-    if data == 'brake !':
+    if data == b'brake !':
         print("\tBrake!")
         os.system('''sh ./set-car-vector.sh _ _''')
