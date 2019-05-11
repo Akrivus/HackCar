@@ -2,7 +2,7 @@ import socket
 import os
 
 server = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-server.bind("0.0.0.0", 4404)
+server.bind(("0.0.0.0", 4404))
 
 while 1 > 0:
     data, addr = server.recvfrom(7)
