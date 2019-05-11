@@ -7,7 +7,7 @@ server.bind((input("Enter IP address: "), 9909))
 
 while 1 > 0:
     data, addr = server.recvfrom(7)
-    print("{}: Data received...".format(addr))
+    print("{}: Data received... ({})".format(addr, data))
     if data == 'turn ++':
         print("\tTurn left!")
         os.system('''sh ./set-car-vector.sh w a''')
