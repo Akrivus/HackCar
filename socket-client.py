@@ -4,6 +4,7 @@ import time
 
 ipaddr = input("Enter IP address: ")
 client = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+client.sendto("brake !".encode('utf-8'), (ipaddr, 9909))
 
 while 1 > 0:
     if keyboard.is_pressed('w'):

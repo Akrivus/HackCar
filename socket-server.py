@@ -7,23 +7,23 @@ server.bind((input("Enter IP address: "), 9909))
 while 1 > 0:
     data, addr = server.recvfrom(7)
     if data == 'turn ++':
+        print("{}: Turn left!".format(addr))
         os.system('''sh ./set-car-vector.sh w a''')
-        print("{}: Turn left!".format(addr))
     if data == 'turn +-':
+        print("{}: Turn right!".format(addr))
         os.system('''sh ./set-car-vector.sh w d''')
-        print("{}: Turn right!".format(addr))
     if data == 'turn -+':
-        os.system('''sh ./set-car-vector.sh s a''')
         print("{}: Turn left!".format(addr))
+        os.system('''sh ./set-car-vector.sh s a''')
     if data == 'turn --':
-        os.system('''sh ./set-car-vector.sh s d''')
         print("{}: Turn right!".format(addr))
+        os.system('''sh ./set-car-vector.sh s d''')
     if data == 'drive +':
-        os.system('''sh ./set-car-vector.sh w _''')
         print("{}: Go forwards!".format(addr))
+        os.system('''sh ./set-car-vector.sh w _''')
     if data == 'drive -':
-        os.system('''sh ./set-car-vector.sh s _''')
         print("{}: Go backwards!".format(addr))
+        os.system('''sh ./set-car-vector.sh s _''')
     if data == 'brake !':
-        os.system('''sh ./set-car-vector.sh _ _''')
         print("{}: Brake!".format(addr))
+        os.system('''sh ./set-car-vector.sh _ _''')
