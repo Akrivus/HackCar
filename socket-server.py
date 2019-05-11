@@ -11,7 +11,7 @@ while 1 > 0:
         print("\tTurn left!")
         os.system('''sh ./set-car-vector.sh w a''')
     if data == 'turn +-':
-        print("\tTurn rigth!")
+        print("\tTurn right!")
         os.system('''sh ./set-car-vector.sh w d''')
     if data == 'turn -+':
         print("\tTurn left!")
