@@ -6,7 +6,7 @@ ipaddr = (input("Enter IP address: "), 9909)
 client = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
 client.settimeout(1)
 client.sendto(b"brake !", ipaddr)
-sleep_time = 0.1
+sleep_time = 0.2
 
 while 1 > 0:
     if keyboard.is_pressed('space'):
