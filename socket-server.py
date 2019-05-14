@@ -10,22 +10,22 @@ while 1 > 0:
     print("{}: Data received... ({})".format(addr, data))
     if data == b'turn ++':
         print("\tTurn left!")
-        os.system('''sh ./set-car-vector.sh w a''')
+        os.system('''sh ./set-car-vector.sh w a >/dev/null''')
     if data == b'turn +-':
         print("\tTurn right!")
-        os.system('''sh ./set-car-vector.sh w d''')
+        os.system('''sh ./set-car-vector.sh w d >/dev/null''')
     if data == b'turn -+':
         print("\tTurn left!")
-        os.system('''sh ./set-car-vector.sh s a''')
+        os.system('''sh ./set-car-vector.sh s a >/dev/null''')
     if data == b'turn --':
         print("\tTurn right!")
-        os.system('''sh ./set-car-vector.sh s d''')
+        os.system('''sh ./set-car-vector.sh s d >/dev/null''')
     if data == b'drive +':
         print("\tGo foward!")
-        os.system('''sh ./set-car-vector.sh w _''')
+        os.system('''sh ./set-car-vector.sh w _ >/dev/null''')
     if data == b'drive -':
         print("\tGo backward!")
-        os.system('''sh ./set-car-vector.sh s _''')
+        os.system('''sh ./set-car-vector.sh s _ >/dev/null''')
     if data == b'brake !':
         print("\tBrake!")
-        os.system('''sh ./set-car-vector.sh _ _''')
+        os.system('''sh ./set-car-vector.sh _ _ >/dev/null''')
