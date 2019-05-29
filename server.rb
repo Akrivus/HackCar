@@ -83,7 +83,7 @@ def update
                 system('sh ./set-car-vector.sh right >/dev/null')
             end
         end
-        sleep 0.02
+        sleep 0.01
     end
 end
 
