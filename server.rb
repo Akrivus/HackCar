@@ -74,3 +74,4 @@ get '/move' do
 
 end
 
+Thread.new { update }
