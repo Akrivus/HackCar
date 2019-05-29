@@ -1,6 +1,9 @@
 require 'sinatra'
 require 'thread'
 
+set :bind, '0.0.0.0'
+set :port,  80
+
 CAR_MUTEX = Mutex.new()
 CAR = {
     turn: :reset,
