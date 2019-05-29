@@ -89,7 +89,7 @@ def update
                 Thread.new { system('sh ./set-car-vector.sh right >/dev/null') }
             end
         end
-        sleep 0.01
+        sleep 0.02
     end
 end
 
