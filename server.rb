@@ -40,8 +40,8 @@ get     '/'             do
         Coordinates: #{CAR[:posx]}, #{CAR[:posy]}
         Distance (from origin): #{(CAR[:posx] + CAR[:posy]).abs.to_f / 2.0}
         
-        #{CAR[:vely] == 1 ? 'Moving forward' ? (CAR[:vely] == -1 ? 'Moving backward' : '')}
-        #{CAR[:velx] == 1 ? 'Turning right' ? (CAR[:velx] == -1 ? 'Turning left' : '')}
+        #{CAR[:vely] == 1 ? 'Moving forward' : (CAR[:vely] == -1 ? 'Moving backward' : '')}
+        #{CAR[:velx] == 1 ? 'Turning right' : (CAR[:velx] == -1 ? 'Turning left' : '')}
     )
 end
 
