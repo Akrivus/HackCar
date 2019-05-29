@@ -87,5 +87,5 @@ def update
     end
 end
 
-Thread.new { system('nc -l -u -p 7055 | csdr convert_i16_f | csdr gain_ff 1 | csdr dsb_fc | sudo ../rpitx/rpitx -i - -m IQFLOAT -f 27.145e3 -s 48000') }
+Thread.new { system('nc -n 127.0.0.1 -l -u -p 7055 | csdr convert_i16_f | csdr gain_ff 1 | csdr dsb_fc | sudo ../rpitx/rpitx -i - -m IQFLOAT -f 27.145e3 -s 48000') }
 Thread.new { update }
