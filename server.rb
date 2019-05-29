@@ -6,27 +6,33 @@ set :bind, '0.0.0.0'
 set :port,  80
 
 post    '/vel/:x/:y'    do
+    'Invalid parameters(s)'
     CAR_MUTEX.synchronize do
         tuple = [params['x'].to_i, params['y'].to_i]
         if VELOCITIES.include? tuple
             CAR[:velx] = tuple[0]
             CAR[:vely] = tuple[1]
+            'Velocity set.'
         end
     end
 end
 put     '/vel/x/:x'     do
+    'Invalid parameters(s).'
     CAR_MUTEX.synchronize do
         tuple = [params['x'].to_i, CAR[:vely]]
         if VELOCITIES.include? tuple
             CAR[:velx] = tuple[0]
+            'Velocity set.'
         end
     end
 end
 put     '/vel/y/:y'     do
+    'Invalid parameters(s).'
     CAR_MUTEX.synchronize do
         tuple = [CAR[:velx], params['y'].to_i]
         if VELOCITIES.include? tuple
             CAR[:vely] = tuple[1]
+            'Velocity set.'
         end
     end
 end
@@ -87,5 +93,5 @@ def update
     end
 end
 
-Thread.new { system('nc -klu -p 9669 | sox - -t wav -r 48k -b 16 - repeat 1 | csdr convert_i16_f | csdr gain_ff 1 | csdr dsb_fc | sudo ../rpitx/rpitx -i - -m IQFLOAT -f 27.145e3 -s 44100') }
+Thread.new { system('nc -klu -p 6996 | sox - -t wav -r 48k -b 16 - repeat 1 | csdr convert_i16_f | csdr gain_ff 1 | csdr dsb_fc | sudo ../rpitx/rpitx -i - -m IQFLOAT -f 27.145e3 -s 48000') }
 Thread.new { update }
