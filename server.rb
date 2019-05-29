@@ -78,20 +78,19 @@ def update
             CAR[:posy] += CAR[:vely]
             case CAR[:vely]
             when -1
-                system('sh ./set-car-vector.sh reverse >/dev/null')
+                Thread.new { system('sh ./set-car-vector.sh reverse >/dev/null') }
             when  1
-                system('sh ./set-car-vector.sh forward >/dev/null')
+                Thread.new { system('sh ./set-car-vector.sh forward >/dev/null') }
             end
             case CAR[:velx]
             when -1
-                system('sh ./set-car-vector.sh left >/dev/null')
+                Thread.new { system('sh ./set-car-vector.sh left >/dev/null') }
             when  1
-                system('sh ./set-car-vector.sh right >/dev/null')
+                Thread.new { system('sh ./set-car-vector.sh right >/dev/null') }
             end
         end
         sleep 0.01
     end
 end
 
-Thread.new { system('sh ./udp-sound.sh') }
 Thread.new { update }
