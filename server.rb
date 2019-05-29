@@ -1,9 +1,51 @@
 require 'sinatra'
 require 'thread'
+require 'date'
 
 set :bind, '0.0.0.0'
 set :port,  80
 
+post    '/vel/:x/:y'    do
+    CAR_MUTEX.synchronize do
+        tuple = [params['x'].to_i, params['y'].to_i]
+        if VELOCITIES.include? tuple
+            CAR[:velx] = tuple[0]
+            CAR[:vely] = tuple[1]
+        end
+    end
+end
+put     '/vel/x/:x'     do
+    CAR_MUTEX.synchronize do
+        tuple = [params['x'].to_i, CAR[:vely]]
+        if VELOCITIES.include? tuple
+            CAR[:velx] = tuple[0]
+        end
+    end
+end
+put     '/vel/y/:y'     do
+    CAR_MUTEX.synchronize do
+        tuple = [CAR[:velx], params['y'].to_i]
+        if VELOCITIES.include? tuple
+            CAR[:vely] = tuple[1]
+        end
+    end
+end
+get     '/'             do
+    %Q(
+        Current Time: #{DateTime.now}
+        Driving Time: #{StartTime}
+        Driving Duration: #{(DateTime.now - StartTime).to_f * 24.0 * 60.0} minutes
+
+        Current Velocity: #{CAR[:velx]}, #{CAR[:vely]}
+        Coordinates: #{CAR[:posx]}, #{CAR[:posy]}
+        Distance (from origin): #{(CAR[:posx] + CAR[:posy]).abs.to_f / 2.0}
+        
+        #{CAR[:vely] == 1 ? 'Moving forward' ? (CAR[:vely] == -1 ? 'Moving backward' : '')}
+        #{CAR[:velx] == 1 ? 'Turning right' ? (CAR[:velx] == -1 ? 'Turning left' : '')}
+    )
+end
+
+StartTime = DateTime.now
 VELOCITIES = [
     [-1, -1],
     [-1,  0],
@@ -42,32 +84,6 @@ def update
             end
         end
         sleep 0.03
-    end
-end
-
-post 'vel/:x/:y' do
-    CAR_MUTEX.synchronize do
-        tuple = [params['x'].to_i, params['y'].to_i]
-        if VELOCITIES.include? tuple
-            CAR[:velx] = tuple[0]
-            CAR[:vely] = tuple[1]
-        end
-    end
-end
-put  'vel/x/:x'  do
-    CAR_MUTEX.synchronize do
-        tuple = [params['x'].to_i, CAR[:vely]]
-        if VELOCITIES.include? tuple
-            CAR[:velx] = tuple[0]
-        end
-    end
-end
-put  'vel/y/:y'  do
-    CAR_MUTEX.synchronize do
-        tuple = [CAR[:velx], params['y'].to_i]
-        if VELOCITIES.include? tuple
-            CAR[:vely] = tuple[1]
-        end
     end
 end
 
