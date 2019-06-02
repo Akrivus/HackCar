@@ -73,21 +73,23 @@ CAR = {
 
 def update
     loop do
+        velocity = [0, 0]
         CAR_MUTEX.synchronize do
-            CAR[:posx] += CAR[:velx]
-            CAR[:posy] += CAR[:vely]
-            case CAR[:vely]
-            when -1
-                system('sox -t wav ./states/reverse.wav -t wav -r 48k -b 16 - repeat 10 | nc localhost 7099')
-            when  1
-                system('sox -t wav ./states/forward.wav -t wav -r 48k -b 16 - repeat 10 | nc localhost 7099')
-            end
-            case CAR[:velx]
-            when -1
-                system('sox -t wav ./states/left.wav -t wav -r 48k -b 16 - repeat 10 | nc localhost 7099')
-            when  1
-                system('sox -t wav ./states/right.wav -t wav -r 48k -b 16 - repeat 10 | nc localhost 7099')
-            end
+            velocity = [CAR[:velx], CAR[:vely]]
+            CAR[:posx] += velocity[0]
+            CAR[:posy] += velocity[1]
+        end
+        case velocity[1]
+        when -1
+            system('sox -t wav ./states/reverse.wav -t wav -r 48k -b 16 - repeat 10 | nc localhost 7099')
+        when  1
+            system('sox -t wav ./states/forward.wav -t wav -r 48k -b 16 - repeat 10 | nc localhost 7099')
+        end
+        case velocity[0]
+        when -1
+            system('sox -t wav ./states/left.wav -t wav -r 48k -b 16 - repeat 10 | nc localhost 7099')
+        when  1
+            system('sox -t wav ./states/right.wav -t wav -r 48k -b 16 - repeat 10 | nc localhost 7099')
         end
         sleep 0.0
     end
