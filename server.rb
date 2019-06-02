@@ -72,24 +72,28 @@ CAR = {
 }
 
 def update
+    velocity = [0, 0]
     loop do
-        velocity = [0, 0]
         CAR_MUTEX.synchronize do
-            velocity = [CAR[:velx], CAR[:vely]]
+            change = [CAR[:velx], CAR[:vely]]
+            if velocity != change
+                system('killall -9 nc sox')
+                velocity = change
+            end
             CAR[:posx] += velocity[0]
             CAR[:posy] += velocity[1]
         end
         case velocity[1]
         when -1
-            system('sox -t wav ./states/reverse.wav -t wav -r 48k -b 16 - repeat 10 | nc localhost 7099')
+            system('sox -t wav ./states/reverse.wav -t wav -r 48k -b 16 - repeat 1 | nc localhost 7099')
         when  1
-            system('sox -t wav ./states/forward.wav -t wav -r 48k -b 16 - repeat 10 | nc localhost 7099')
+            system('sox -t wav ./states/forward.wav -t wav -r 48k -b 16 - repeat 1 | nc localhost 7099')
         end
         case velocity[0]
         when -1
-            system('sox -t wav ./states/left.wav -t wav -r 48k -b 16 - repeat 10 | nc localhost 7099')
+            system('sox -t wav ./states/left.wav -t wav -r 48k -b 16 - repeat 1 | nc localhost 7099')
         when  1
-            system('sox -t wav ./states/right.wav -t wav -r 48k -b 16 - repeat 10 | nc localhost 7099')
+            system('sox -t wav ./states/right.wav -t wav -r 48k -b 16 - repeat 1 | nc localhost 7099')
         end
         sleep 0.0
     end
