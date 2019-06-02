@@ -12,6 +12,7 @@ post    '/vel/:x/:y'    do
         if VELOCITIES.include? tuple
             CAR[:velx] = tuple[0]
             CAR[:vely] = tuple[1]
+            CAR[:kill] = true
             'Velocity set.'
         end
     end
@@ -22,6 +23,7 @@ put     '/vel/x/:x'     do
         tuple = [params['x'].to_i, CAR[:vely]]
         if VELOCITIES.include? tuple
             CAR[:velx] = tuple[0]
+            CAR[:kill] = true
             'Velocity set.'
         end
     end
@@ -32,6 +34,7 @@ put     '/vel/y/:y'     do
         tuple = [CAR[:velx], params['y'].to_i]
         if VELOCITIES.include? tuple
             CAR[:vely] = tuple[1]
+            CAR[:kill] = true
             'Velocity set.'
         end
     end
@@ -65,6 +68,7 @@ VELOCITIES = [
 ]
 CAR_MUTEX = Mutex.new()
 CAR = {
+    kill: false,
     velx: 0,
     vely: 0,
     posx: 0,
@@ -72,24 +76,22 @@ CAR = {
 }
 
 def update
-    velocity = [0, 0]
     tx = nil
     loop do
         CAR_MUTEX.synchronize do
-            change = [CAR[:velx], CAR[:vely]]
-            if velocity != change
-                velocity = change
+            if CAR[:kill]
+                CAR[:kill] = false
                 tx.kill
             end
             CAR[:posx] += velocity[0]
             CAR[:posy] += velocity[1]
-            case velocity[0]
+            case CAR[:velx]
             when -1
                 tx = Thread.new { system('sox -t wav ./states/left.wav -t wav -r 48k -b 16 - repeat 1 | nc localhost 7099') }
             when  1
                 tx = Thread.new { system('sox -t wav ./states/right.wav -t wav -r 48k -b 16 - repeat 1 | nc localhost 7099') }
             end
-            case velocity[1]
+            case CAR[:vely]
             when -1
                 tx = Thread.new { system('sox -t wav ./states/reverse.wav -t wav -r 48k -b 16 - repeat 1 | nc localhost 7099') }
             when  1
