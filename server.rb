@@ -78,15 +78,15 @@ def update
             CAR[:posy] += CAR[:vely]
             case CAR[:vely]
             when -1
-                system('sox -t wav reverse.wav -t wav -r 48k -b 16 - | nc -q0 -w1 localhost 7099')
+                system('sox -t wav ./states/reverse.wav -t wav -r 48k -b 16 - | nc -q0 -w1 localhost 7099')
             when  1
-                system('sox -t wav forward.wav -t wav -r 48k -b 16 - | nc -q0 -w1 localhost 7099')
+                system('sox -t wav ./states/forward.wav -t wav -r 48k -b 16 - | nc -q0 -w1 localhost 7099')
             end
             case CAR[:velx]
             when -1
-                system('sox -t wav left.wav -t wav -r 48k -b 16 - | nc -q0 -w1 localhost 7099')
+                system('sox -t wav ./states/left.wav -t wav -r 48k -b 16 - | nc -q0 -w1 localhost 7099')
             when  1
-                system('sox -t wav right.wav -t wav -r 48k -b 16 - | nc -q0 -w1 localhost 7099')
+                system('sox -t wav ./states/right.wav -t wav -r 48k -b 16 - | nc -q0 -w1 localhost 7099')
             end
         end
         sleep 0.05
