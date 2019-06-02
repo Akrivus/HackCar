@@ -79,7 +79,7 @@ def update
     loop do
         CAR_MUTEX.synchronize do
             if CAR[:kill]
-                system('killall nc sox')
+                system('sudo killall nc sox')
                 CAR[:kill] = false
             end
             CAR[:posx] += velocity[0]
