@@ -37,18 +37,18 @@ put     '/vel/y/:y'     do
     end
 end
 get     '/'             do
-    %Q(
-        Current Time: #{DateTime.now}
-        Driving Time: #{StartTime}
-        Driving Duration: #{(DateTime.now - StartTime).to_f * 24.0 * 60.0} minutes
+%Q(
+Current Time: #{DateTime.now}
+Driving Time: #{StartTime}
+Driving Duration: #{(DateTime.now - StartTime).to_f * 24.0 * 60.0} minutes
 
-        Current Velocity: #{CAR[:velx]}, #{CAR[:vely]}
-        Coordinates: #{CAR[:posx]}, #{CAR[:posy]}
-        Distance (from origin): #{(CAR[:posx] + CAR[:posy]).abs.to_f / 2.0}
-        
-        #{CAR[:vely] == 1 ? 'Moving forward' : (CAR[:vely] == -1 ? 'Moving backward' : '')}
-        #{CAR[:velx] == 1 ? 'Turning right' : (CAR[:velx] == -1 ? 'Turning left' : '')}
-    )
+Current Velocity: #{CAR[:velx]}, #{CAR[:vely]}
+Coordinates: #{CAR[:posx]}, #{CAR[:posy]}
+Distance (from origin): #{(CAR[:posx] + CAR[:posy]).abs.to_f / 2.0}    
+Current State:
+    #{CAR[:vely] == 1 ? 'Moving forward' : (CAR[:vely] == -1 ? 'Moving backward' : '')}
+    #{CAR[:velx] == 1 ? 'Turning right' : (CAR[:velx] == -1 ? 'Turning left' : '')}
+)
 end
 
 StartTime = DateTime.now
@@ -82,18 +82,18 @@ def update
             end
             CAR[:posx] += velocity[0]
             CAR[:posy] += velocity[1]
-        end
-        case velocity[1]
-        when -1
-            system('sox -t wav ./states/reverse.wav -t wav -r 48k -b 16 - repeat 1 | nc localhost 7099')
-        when  1
-            system('sox -t wav ./states/forward.wav -t wav -r 48k -b 16 - repeat 1 | nc localhost 7099')
-        end
-        case velocity[0]
-        when -1
-            system('sox -t wav ./states/left.wav -t wav -r 48k -b 16 - repeat 1 | nc localhost 7099')
-        when  1
-            system('sox -t wav ./states/right.wav -t wav -r 48k -b 16 - repeat 1 | nc localhost 7099')
+            case velocity[0]
+            when -1
+                Thread.new { system('sox -t wav ./states/left.wav -t wav -r 48k -b 16 - repeat 1 | nc localhost 7099') }
+            when  1
+                Thread.new { system('sox -t wav ./states/right.wav -t wav -r 48k -b 16 - repeat 1 | nc localhost 7099') }
+            end
+            case velocity[1]
+            when -1
+                Thread.new { system('sox -t wav ./states/reverse.wav -t wav -r 48k -b 16 - repeat 1 | nc localhost 7099') }
+            when  1
+                Thread.new { system('sox -t wav ./states/forward.wav -t wav -r 48k -b 16 - repeat 1 | nc localhost 7099') }
+            end
         end
         sleep 0.0
     end
