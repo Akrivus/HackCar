@@ -47,7 +47,10 @@ Driving Duration: #{(DateTime.now - StartTime).to_f * 24.0 * 60.0} minutes
 
 Current Velocity: #{CAR[:velx]}, #{CAR[:vely]}
 Coordinates: #{CAR[:posx]}, #{CAR[:posy]}
-Distance (from origin): #{(CAR[:posx] + CAR[:posy]).abs.to_f / 2.0}    
+Distance (from origin): #{(CAR[:posx] + CAR[:posy]).abs.to_f / 2.0} 
+
+Update Trigger #{CAR[:kill] ? 'ON' : 'OFF'}
+Current Cycle: #{CAR[:cycl]}
 Current State:
     #{CAR[:vely] == 1 ? 'Moving forward' : (CAR[:vely] == -1 ? 'Moving backward' : '')}
     #{CAR[:velx] == 1 ? 'Turning right' : (CAR[:velx] == -1 ? 'Turning left' : '')}
@@ -68,6 +71,7 @@ VELOCITIES = [
 ]
 CAR_MUTEX = Mutex.new()
 CAR = {
+    cycl: 0,
     kill: false,
     velx: 0,
     vely: 0,
@@ -96,8 +100,9 @@ def update
             end
             CAR[:posx] += velocity[0]
             CAR[:posy] += velocity[1]
+            CAR[:cycl] += 1
         end
-        sleep 0.0
+        sleep 0.04
     end
 end
 
