@@ -78,19 +78,20 @@ def update
             CAR[:posy] += CAR[:vely]
             case CAR[:vely]
             when -1
-                system('sh ./set-car-vector.sh reverse >/dev/null')
+                system('sox -t wav reverse.wav -t wav -r 48k -b 16 - | nc -q0 -w1 localhost 7099')
             when  1
-                system('sh ./set-car-vector.sh forward >/dev/null')
+                system('sox -t wav forward.wav -t wav -r 48k -b 16 - | nc -q0 -w1 localhost 7099')
             end
             case CAR[:velx]
             when -1
-                system('sh ./set-car-vector.sh left >/dev/null')
+                system('sox -t wav left.wav -t wav -r 48k -b 16 - | nc -q0 -w1 localhost 7099')
             when  1
-                system('sh ./set-car-vector.sh right >/dev/null')
+                system('sox -t wav right.wav -t wav -r 48k -b 16 - | nc -q0 -w1 localhost 7099')
             end
         end
-        sleep 0.0
+        sleep 0.05
     end
 end
 
+Thread.new { system('ncat -w1 -klp 7099 -c "csdr convert_i16_f | csdr gain_ff 1 | csdr dsb_fc | sudo ../rpitx/rpitx -i - -m IQFLOAT -f 27.145e3 -s 48000"') }
 Thread.new { update }
