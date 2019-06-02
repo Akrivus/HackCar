@@ -57,6 +57,7 @@ Current State:
 )
 end
 
+PORT = rand(4444..9999).to_s
 StartTime = DateTime.now
 VELOCITIES = [
     [-1, -1],
@@ -86,15 +87,15 @@ def update
                 system('sudo killall nc sox')
                 case CAR[:velx]
                 when -1
-                    Thread.new { system('sox -t wav ./states/left.wav -t wav -r 48k -b 16 - repeat 1 | nc localhost 7099') }
+                    Thread.new { system('sox -t wav ./states/left.wav -t wav -r 48k -b 16 - repeat 1 | nc localhost ' + PORT) }
                 when  1
-                    Thread.new { system('sox -t wav ./states/right.wav -t wav -r 48k -b 16 - repeat 1 | nc localhost 7099') }
+                    Thread.new { system('sox -t wav ./states/right.wav -t wav -r 48k -b 16 - repeat 1 | nc localhost ' + PORT) }
                 end
                 case CAR[:vely]
                 when -1
-                    Thread.new { system('sox -t wav ./states/reverse.wav -t wav -r 48k -b 16 - repeat 1 | nc localhost 7099') }
+                    Thread.new { system('sox -t wav ./states/reverse.wav -t wav -r 48k -b 16 - repeat 1 | nc localhost ' + PORT) }
                 when  1
-                    Thread.new { system('sox -t wav ./states/forward.wav -t wav -r 48k -b 16 - repeat 1 | nc localhost 7099') }
+                    Thread.new { system('sox -t wav ./states/forward.wav -t wav -r 48k -b 16 - repeat 1 | nc localhost ' + PORT) }
                 end
                 CAR[:kill] = false
             end
@@ -106,5 +107,5 @@ def update
     end
 end
 
-Thread.new { system('ncat -klp 7099 -c "csdr convert_i16_f | csdr gain_ff 1 | csdr dsb_fc | sudo ../rpitx/rpitx -i - -m IQFLOAT -f 27.145e3 -s 48000"') }
+Thread.new { system('ncat -klp ' + PORT + ' -c "csdr convert_i16_f | csdr gain_ff 1 | csdr dsb_fc | sudo ../rpitx/rpitx -i - -m IQFLOAT -f 27.145e3 -s 48000"') }
 Thread.new { update }
