@@ -81,8 +81,11 @@ CAR = {
 
 def update
     loop do
+        puts "hi"
         CAR_MUTEX.synchronize do
+            puts "in the mutex"
             if CAR[:kill]
+                puts "die plz"
                 system('sudo killall nc sox')
                 case CAR[:velx]
                 when -1
