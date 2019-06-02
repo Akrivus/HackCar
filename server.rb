@@ -81,11 +81,8 @@ CAR = {
 
 def update
     loop do
-        puts "hi"
         CAR_MUTEX.synchronize do
-            puts "in the mutex"
             if CAR[:kill]
-                puts "die plz"
                 system('sudo killall nc sox')
                 case CAR[:velx]
                 when -1
@@ -101,8 +98,8 @@ def update
                 end
                 CAR[:kill] = false
             end
-            CAR[:posx] += velocity[0]
-            CAR[:posy] += velocity[1]
+            CAR[:posx] += CAR[:velx]
+            CAR[:posy] += CAR[:vely]
             CAR[:cycl] += 1
         end
         sleep 0.04
