@@ -78,20 +78,20 @@ def update
             CAR[:posy] += CAR[:vely]
             case CAR[:vely]
             when -1
-                system('sox -t wav ./states/reverse.wav -t wav -r 48k -b 16 - | nc -q0 -w1 localhost 7099')
+                system('sox -t wav ./states/reverse.wav -t wav -r 48k -b 16 - repeat 10 | nc localhost 7099')
             when  1
-                system('sox -t wav ./states/forward.wav -t wav -r 48k -b 16 - | nc -q0 -w1 localhost 7099')
+                system('sox -t wav ./states/forward.wav -t wav -r 48k -b 16 - repeat 10 | nc localhost 7099')
             end
             case CAR[:velx]
             when -1
-                system('sox -t wav ./states/left.wav -t wav -r 48k -b 16 - | nc -q0 -w1 localhost 7099')
+                system('sox -t wav ./states/left.wav -t wav -r 48k -b 16 - repeat 10 | nc localhost 7099')
             when  1
-                system('sox -t wav ./states/right.wav -t wav -r 48k -b 16 - | nc -q0 -w1 localhost 7099')
+                system('sox -t wav ./states/right.wav -t wav -r 48k -b 16 - repeat 10 | nc localhost 7099')
             end
         end
-        sleep 0.05
+        sleep 0.0
     end
 end
 
-Thread.new { system('ncat -w1 -klp 7099 -c "csdr convert_i16_f | csdr gain_ff 1 | csdr dsb_fc | sudo ../rpitx/rpitx -i - -m IQFLOAT -f 27.145e3 -s 48000"') }
+Thread.new { system('ncat -klp 7099 -c "csdr convert_i16_f | csdr gain_ff 1 | csdr dsb_fc | sudo ../rpitx/rpitx -i - -m IQFLOAT -f 27.145e3 -s 48000"') }
 Thread.new { update }
