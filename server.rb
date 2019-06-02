@@ -73,26 +73,27 @@ CAR = {
 
 def update
     velocity = [0, 0]
+    tx = nil
     loop do
         CAR_MUTEX.synchronize do
             change = [CAR[:velx], CAR[:vely]]
             if velocity != change
-                system('killall -9 nc sox')
                 velocity = change
+                tx.kill
             end
             CAR[:posx] += velocity[0]
             CAR[:posy] += velocity[1]
             case velocity[0]
             when -1
-                Thread.new { system('sox -t wav ./states/left.wav -t wav -r 48k -b 16 - repeat 1 | nc localhost 7099') }
+                tx = Thread.new { system('sox -t wav ./states/left.wav -t wav -r 48k -b 16 - repeat 1 | nc localhost 7099') }
             when  1
-                Thread.new { system('sox -t wav ./states/right.wav -t wav -r 48k -b 16 - repeat 1 | nc localhost 7099') }
+                tx = Thread.new { system('sox -t wav ./states/right.wav -t wav -r 48k -b 16 - repeat 1 | nc localhost 7099') }
             end
             case velocity[1]
             when -1
-                Thread.new { system('sox -t wav ./states/reverse.wav -t wav -r 48k -b 16 - repeat 1 | nc localhost 7099') }
+                tx = Thread.new { system('sox -t wav ./states/reverse.wav -t wav -r 48k -b 16 - repeat 1 | nc localhost 7099') }
             when  1
-                Thread.new { system('sox -t wav ./states/forward.wav -t wav -r 48k -b 16 - repeat 1 | nc localhost 7099') }
+                tx = Thread.new { system('sox -t wav ./states/forward.wav -t wav -r 48k -b 16 - repeat 1 | nc localhost 7099') }
             end
         end
         sleep 0.0
